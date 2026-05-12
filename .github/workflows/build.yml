@@ -23,6 +23,11 @@ jobs:
           flutter-version: '3.41'
           channel: 'stable'
 
+      - name: Generate images
+        run: |
+          curl -s "https://image.pollinations.ai/prompt/Islamic%20prayer%20beads%20tasbih%20gold%20emerald%20green%20dark%20background%20mosque%20silhouette%20app%20background" -o assets/images/app_bg.png
+          curl -s "https://image.pollinations.ai/prompt/سبح%20وتبرع%20Tasbih%20Donate%20app%20logo%20gold%20crescent%20moon%20prayer%20beads%20Islamic%20typography" -o assets/images/logo.png
+
       - name: Install dependencies
         run: flutter pub get
 
