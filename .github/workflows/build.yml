@@ -25,8 +25,9 @@ jobs:
 
       - name: Generate images
         run: |
-          curl -s "https://image.pollinations.ai/prompt/Islamic%20prayer%20beads%20tasbih%20gold%20emerald%20green%20dark%20background%20mosque%20silhouette%20app%20background" -o assets/images/app_bg.png
-          curl -s "https://image.pollinations.ai/prompt/سبح%20وتبرع%20Tasbih%20Donate%20app%20logo%20gold%20crescent%20moon%20prayer%20beads%20Islamic%20typography" -o assets/images/logo.png
+          curl -s "https://image.pollinations.ai/prompt/Luxury%20Islamic%20mobile%20app%20splash%20screen%20background%20deep%20dark%20emerald%20green%20gradient%20golden%20tasbih%20prayer%20beads%20mosque%20silhouette%20Arabic%20calligraphy%20سبح%20وتبرع%20glowing%20gold%20premium%20cinematic%20lighting?width=1080&height=1920&seed=42&model=flux" -o assets/images/splash_bg.png
+          curl -s "https://image.pollinations.ai/prompt/Premium%20Islamic%20mobile%20app%20icon%20golden%20crescent%20moon%20tasbih%20prayer%20beads%20Arabic%20calligraphy%20سبح%20وتبرع%20deep%20emerald%20green%20luxurious%20gold%20metallic%20vector?width=1024&height=1024&seed=123&model=flux" -o assets/images/icon.png
+          curl -s "https://image.pollinations.ai/prompt/Elegant%20Islamic%20charity%20donation%20illustration%20glowing%20donation%20box%20golden%20coins%20helping%20hands%20mosque%20silhouette%20emerald%20green%20gold%20flat%20vector?width=1024&height=1024&seed=777&model=flux" -o assets/images/donation.png
 
       - name: Install dependencies
         run: flutter pub get
