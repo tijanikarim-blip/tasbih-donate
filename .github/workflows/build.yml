@@ -29,6 +29,15 @@ jobs:
           curl -s "https://image.pollinations.ai/prompt/Premium%20Islamic%20mobile%20app%20icon%20golden%20crescent%20moon%20tasbih%20prayer%20beads%20Arabic%20calligraphy%20سبح%20وتبرع%20deep%20emerald%20green%20luxurious%20gold%20metallic%20vector?width=1024&height=1024&seed=123&model=flux" -o assets/images/icon.png
           curl -s "https://image.pollinations.ai/prompt/Elegant%20Islamic%20charity%20donation%20illustration%20glowing%20donation%20box%20golden%20coins%20helping%20hands%20mosque%20silhouette%20emerald%20green%20gold%20flat%20vector?width=1024&height=1024&seed=777&model=flux" -o assets/images/donation.png
 
+      - name: Generate video
+        run: |
+          curl -s -X POST https://api.free.ai/v1/video/generate/ \
+            -H "Authorization: Bearer ${{ secrets.FREEAI_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"prompt":"Golden Islamic tasbih prayer beads glowing on dark emerald background, holy light rays, cinematic slow motion, spiritual atmosphere","duration":4,"aspect_ratio":"16:9","model":"cogvideox"}' \
+            -o video_response.json
+          python -c "import json; d=json.load(open('video_response.json')); print(d.get('video_url',''))" > video_url.txt
+
       - name: Install dependencies
         run: flutter pub get
 
