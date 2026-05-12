@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../infrastructure/services/firebase_service.dart';
 import '../../shared/constants/app_colors.dart';
 import '../../shared/constants/app_constants.dart';
 
@@ -101,7 +102,10 @@ class _SplashScreenState extends State<SplashScreen> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await FirebaseService().signInWithGoogle();
+                      if (context.mounted) context.go('/home');
+                    },
                     child: const Text('تسجيل الدخول', style: TextStyle(fontSize: 16)),
                   ).animate().fadeIn(duration: 1800.ms),
                 ],
