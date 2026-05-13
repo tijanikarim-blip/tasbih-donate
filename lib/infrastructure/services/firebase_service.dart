@@ -12,7 +12,7 @@ class FirebaseService {
   FirebaseAuth get auth => FirebaseAuth.instance;
   FirebaseFirestore get firestore => FirebaseFirestore.instance;
   FirebaseStorage get storage => FirebaseStorage.instance;
-  GoogleSignIn get googleSignIn => GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   Future<void> initialize() async {
     await Firebase.initializeApp();
@@ -35,20 +35,24 @@ class FirebaseService {
   }
 
   Future<User?> signInWithGoogle() async {
-    final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) return null;
-    final googleAuth = await googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    final result = await auth.signInWithCredential(credential);
-    return result.user;
+    try {
+      final googleUser = await _googleSignIn.authenticate();
+      if (googleUser == null) return null;
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: '',
+        idToken: googleAuth.idToken,
+      );
+      final result = await auth.signInWithCredential(credential);
+      return result.user;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<void> signOut() async {
     await auth.signOut();
-    await googleSignIn.signOut();
+    await _googleSignIn.disconnect();
   }
 
   User? get currentUser => auth.currentUser;
