@@ -15,44 +15,44 @@ import '../../presentation/screens/more_screen.dart';
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(path: '/', builder: (_, _) => const SplashScreen()),
-    GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
-    GoRoute(path: '/adhkar', builder: (_, _) => const AdhkarScreen()),
+    GoRoute(path: '/', builder: (context, _) => const SplashScreen()),
+    GoRoute(path: '/home', builder: (context, _) => const HomeScreen()),
+    GoRoute(path: '/adhkar', builder: (context, _) => const AdhkarScreen()),
     GoRoute(
       path: '/emotional-assistant',
-      builder: (_, _) => const EmotionalAssistantScreen(),
+      builder: (context, _) => const EmotionalAssistantScreen(),
     ),
     GoRoute(
       path: '/recommendation/:mood',
-      builder: (_, state) => RecommendationScreen(
+      builder: (context, state) => RecommendationScreen(
         mood: state.pathParameters['mood'] ?? '',
       ),
     ),
     GoRoute(
       path: '/audio-player/:id',
-      builder: (_, state) => AudioPlayerScreen(
+      builder: (context, state) => AudioPlayerScreen(
         trackId: state.pathParameters['id'] ?? '',
       ),
     ),
     GoRoute(
       path: '/occasion-duas',
-      builder: (_, _) => const OccasionDuasScreen(),
+      builder: (context, _) => const OccasionDuasScreen(),
     ),
     GoRoute(
       path: '/bab-al-ajr',
-      builder: (_, _) => const BabAlAjrScreen(),
+      builder: (context, _) => const BabAlAjrScreen(),
     ),
     GoRoute(
       path: '/project-details/:id',
-      builder: (_, state) => ProjectDetailsScreen(
+      builder: (context, state) => ProjectDetailsScreen(
         projectId: state.pathParameters['id'] ?? '',
       ),
     ),
-    GoRoute(path: '/athari', builder: (_, _) => const AthariScreen()),
+    GoRoute(path: '/athari', builder: (context, _) => const AthariScreen()),
     GoRoute(
       path: '/financial-reports',
-      builder: (_, _) => const FinancialReportsScreen(),
+      builder: (context, _) => const FinancialReportsScreen(),
     ),
-    GoRoute(path: '/more', builder: (_, _) => const MoreScreen()),
+    GoRoute(path: '/more', builder: (context, _) => const MoreScreen()),
   ],
 );

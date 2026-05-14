@@ -17,17 +17,74 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.0'
+          flutter-version: '3.29.3'
           channel: 'stable'
+          cache: true
+
+      - name: Create Firebase config files
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            echo "$GOOGLE_SERVICES_JSON" > android/app/google-services.json
+          else
+            cat > android/app/google-services.json << 'EOF'
+          {
+            "project_info": {
+              "project_number": "000000000000",
+              "project_id": "tasbih-donate-placeholder",
+              "storage_bucket": "tasbih-donate-placeholder.appspot.com"
+            },
+            "client": [{
+              "client_info": {
+                "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+                "android_client_info": { "package_name": "com.tasbihdonate.tasbih_donate" }
+              },
+              "api_key": [{ "current_key": "placeholder" }],
+              "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
+            }],
+            "configuration_version": "1"
+          }
+          EOF
+          fi
+          if [ -n "$FIREBASE_OPTIONS" ]; then
+            echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
+          else
+            cat > lib/firebase_options.dart << 'EOF'
+          import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+          import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
+
+          class DefaultFirebaseOptions {
+            static FirebaseOptions get currentPlatform {
+              return android;
+            }
+            static const FirebaseOptions android = FirebaseOptions(
+              apiKey: 'placeholder',
+              appId: '1:000000000000:android:0000000000000000',
+              messagingSenderId: '000000000000',
+              projectId: 'tasbih-donate-placeholder',
+              storageBucket: 'tasbih-donate-placeholder.appspot.com',
+            );
+          }
+          EOF
+          fi
 
       - name: Generate images
         run: |
-          curl -s "https://image.pollinations.ai/prompt/Luxury%20Islamic%20mobile%20app%20splash%20screen%20background%20deep%20dark%20emerald%20green%20gradient%20golden%20tasbih%20prayer%20beads%20mosque%20silhouette%20Arabic%20calligraphy%20%D8%B3%D8%A8%D8%AD%20%D9%88%D8%AA%D8%A8%D8%B1%D8%B9%20glowing%20gold%20premium%20cinematic%20lighting?width=1080&height=1920&seed=42&model=flux" -o assets/images/splash_bg.png
-          curl -s "https://image.pollinations.ai/prompt/Premium%20Islamic%20mobile%20app%20icon%20golden%20crescent%20moon%20tasbih%20prayer%20beads%20Arabic%20calligraphy%20%D8%B3%D8%A8%D8%AD%20%D9%88%D8%AA%D8%A8%D8%B1%D8%B9%20deep%20emerald%20green%20luxurious%20gold%20metallic%20vector?width=1024&height=1024&seed=123&model=flux" -o assets/images/icon.png
-          curl -s "https://image.pollinations.ai/prompt/Elegant%20Islamic%20charity%20donation%20illustration%20glowing%20donation%20box%20golden%20coins%20helping%20hands%20mosque%20silhouette%20emerald%20green%20gold%20flat%20vector?width=1024&height=1024&seed=777&model=flux" -o assets/images/donation.png
+          mkdir -p assets/images
+          curl -sf --max-time 30 "https://image.pollinations.ai/prompt/Luxury%20Islamic%20mobile%20app%20splash%20screen%20background%20deep%20dark%20emerald%20green%20gradient%20golden%20tasbih%20prayer%20beads?width=1080&height=1920&seed=42&model=flux" -o assets/images/splash_bg.png || echo "splash_bg generation skipped"
+          curl -sf --max-time 30 "https://image.pollinations.ai/prompt/Premium%20Islamic%20mobile%20app%20icon%20golden%20crescent%20moon%20tasbih%20prayer%20beads?width=1024&height=1024&seed=123&model=flux" -o assets/images/icon.png || echo "icon generation skipped"
+          curl -sf --max-time 30 "https://image.pollinations.ai/prompt/Elegant%20Islamic%20charity%20donation%20illustration%20emerald%20green%20gold?width=1024&height=1024&seed=777&model=flux" -o assets/images/donation.png || echo "donation generation skipped"
 
       - name: Install dependencies
         run: flutter pub get
