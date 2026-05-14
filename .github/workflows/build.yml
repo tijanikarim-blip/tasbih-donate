@@ -20,37 +20,36 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41'
+          flutter-version: '3.32.0'
           channel: 'stable'
 
       - name: Generate images
         run: |
-          cd tasbih
-          curl -s "https://image.pollinations.ai/prompt/Luxury%20Islamic%20mobile%20app%20splash%20screen%20background%20deep%20dark%20emerald%20green%20gradient%20golden%20tasbih%20prayer%20beads%20mosque%20silhouette%20Arabic%20calligraphy%20سبح%20وتبرع%20glowing%20gold%20premium%20cinematic%20lighting?width=1080&height=1920&seed=42&model=flux" -o assets/images/splash_bg.png
-          curl -s "https://image.pollinations.ai/prompt/Premium%20Islamic%20mobile%20app%20icon%20golden%20crescent%20moon%20tasbih%20prayer%20beads%20Arabic%20calligraphy%20سبح%20وتبرع%20deep%20emerald%20green%20luxurious%20gold%20metallic%20vector?width=1024&height=1024&seed=123&model=flux" -o assets/images/icon.png
+          curl -s "https://image.pollinations.ai/prompt/Luxury%20Islamic%20mobile%20app%20splash%20screen%20background%20deep%20dark%20emerald%20green%20gradient%20golden%20tasbih%20prayer%20beads%20mosque%20silhouette%20Arabic%20calligraphy%20%D8%B3%D8%A8%D8%AD%20%D9%88%D8%AA%D8%A8%D8%B1%D8%B9%20glowing%20gold%20premium%20cinematic%20lighting?width=1080&height=1920&seed=42&model=flux" -o assets/images/splash_bg.png
+          curl -s "https://image.pollinations.ai/prompt/Premium%20Islamic%20mobile%20app%20icon%20golden%20crescent%20moon%20tasbih%20prayer%20beads%20Arabic%20calligraphy%20%D8%B3%D8%A8%D8%AD%20%D9%88%D8%AA%D8%A8%D8%B1%D8%B9%20deep%20emerald%20green%20luxurious%20gold%20metallic%20vector?width=1024&height=1024&seed=123&model=flux" -o assets/images/icon.png
           curl -s "https://image.pollinations.ai/prompt/Elegant%20Islamic%20charity%20donation%20illustration%20glowing%20donation%20box%20golden%20coins%20helping%20hands%20mosque%20silhouette%20emerald%20green%20gold%20flat%20vector?width=1024&height=1024&seed=777&model=flux" -o assets/images/donation.png
 
       - name: Install dependencies
-        run: cd tasbih && flutter pub get
+        run: flutter pub get
 
       - name: Analyze
         continue-on-error: true
-        run: cd tasbih && flutter analyze
+        run: flutter analyze
 
       - name: Build APK
-        run: cd tasbih && flutter build apk --release
+        run: flutter build apk --release
 
       - name: Build App Bundle
-        run: cd tasbih && flutter build appbundle --release
+        run: flutter build appbundle --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: tasbih-donate-release-apk
-          path: tasbih/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Upload App Bundle Artifact
         uses: actions/upload-artifact@v4
         with:
           name: tasbih-donate-release-aab
-          path: tasbih/build/app/outputs/bundle/release/app-release.aab
+          path: build/app/outputs/bundle/release/app-release.aab
